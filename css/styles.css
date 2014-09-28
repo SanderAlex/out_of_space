@@ -1,0 +1,17 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+canvas {
+	position: absolute;
+	cursor: none;
+}
+
+#bgCanvas {
+	background-color: black;
+}
+
+#explode {
+	position: absolute;
+}
