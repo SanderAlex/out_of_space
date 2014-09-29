@@ -1,11 +1,11 @@
 html, body {
 	margin: 0;
 	padding: 0;
+	font-family: sans-serif;
 }
 
 canvas {
 	position: absolute;
-	cursor: none;
 }
 
 #bgCanvas {
@@ -14,4 +14,73 @@ canvas {
 
 #explode {
 	position: absolute;
+}
+
+#score {
+	position: absolute;
+	width: 80px;
+	height: 40px;
+	padding: 20px;
+	background-color: rgba(100, 100, 100, 0.4);
+	color: white;
+}
+
+#enemyStats div {
+	float: left;
+	width: 20px;
+	height: 20px;
+	background-image: url("../img/enemy.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#shellStats div {
+	float: left;
+	width: 20px;
+	height: 20px;
+	background-image: url("../img/shield.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+#clear {
+	clear: both;
+	height: 10px;
+}
+
+#newGame {
+	position: absolute;
+	width: 200px;
+	height: 55px;
+	margin-left: 300px;
+	margin-top: 280px;
+	color: #47497E;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	padding-top: 35px;
+	border-radius: 20px;
+	border: 8px solid #47497E;
+}
+#newGame:hover {
+	cursor: pointer;
+	background-color: #808080;
+}
+
+#result {
+	position: absolute;
+	width: 200px;
+	height: 30px;
+	padding: 10px;
+	margin-left: 300px;
+	margin-top: 400px;
+	color: white;
+}
+#result div {
+	float: left;
+	width: 20px;
+	height: 20px;
+	background-image: url("../img/enemy.png");
+	background-size: contain;
+	background-repeat: no-repeat;
 }
