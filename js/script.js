@@ -8,10 +8,18 @@ $(document).ready(function() {
 			this.ENMEXP = new Array();
 			this.METEXP = new Array();
 
+			this.AUDIO = new Array();
+
 			background.initialize();
 			background.newBg();
 			background_interval = setInterval(function() { background.draw(); }, 30);
 			this.pictures();
+			this.audio();
+			this.AUDIO[5].play();
+			this.AUDIO[5].addEventListener('ended', function() {
+			    this.currentTime = 0;
+			    this.play();
+			}, false);
 			$("#newGame").click(function() {
 				$(this).hide();
 				$("#result").hide();
@@ -49,6 +57,16 @@ $(document).ready(function() {
 		  			return;
 		  		}
 		  	}
+		},
+
+		audio: function() {
+			this.AUDIO[0] = new Audio("sound/lazer.wav");
+			this.AUDIO[1] = new Audio("sound/gun.wav");	this.AUDIO[1].volume = 0.1;
+			this.AUDIO[2] = new Audio("sound/enemyExplode.ogg");
+			this.AUDIO[3] = new Audio("sound/shipExplode.wav");
+			this.AUDIO[4] = new Audio("sound/asteroidExplode.wav");	this.AUDIO[4].volume = 0.9;
+
+			this.AUDIO[5] = new Audio("sound/space.mp3"); this.AUDIO[5].volume = 0.2;
 		},
 
 		ready: function() {
@@ -106,6 +124,10 @@ $(document).ready(function() {
 			clearInterval(app_interval);
 			clearInterval(meteor_interval);
 			clearInterval(enemy_interval);
+
+			for(var i = 0; i < field.enemies.length; i++) {
+				clearTimeout(field.enemies[i].shooting);
+			}
 		}
 	}
 
@@ -188,11 +210,12 @@ $(document).ready(function() {
 			this.shell_count = 3;
 			this.isshell = false;
 
+			this.lazer_sound = app.AUDIO[0];
+
 		  	$(this.canvas).bind('mousemove', function(event) {
 	  			ship.move(event);
 			});
 			$(this.canvas).bind('click', function(event) {
-				console.log(field.amm);
 				if(field.amm.length != ship.max_amm)
 	  				ship.fire(event);
 			});
@@ -236,6 +259,7 @@ $(document).ready(function() {
 			app.gameOver();
 
 			animation(0);
+			app.AUDIO[3].play();
 
 			function animation(f) {
 				that.ctx.clearRect(0, 0, that.canvas.width, that.canvas.height);
@@ -275,6 +299,9 @@ $(document).ready(function() {
 
 		fire: function(e) {
 			field.amm.unshift(new Lazer(e));
+			this.lazer_sound.pause();
+			this.lazer_sound.currentTime = 0;
+			this.lazer_sound.play();
 		}
 	}
 
@@ -375,6 +402,9 @@ $(document).ready(function() {
 
 	Asteroid.prototype.destroy = function(index) {
 		this.exp_frame = 0;
+		app.AUDIO[4].pause();
+		app.AUDIO[4].currentTime = 0;
+		app.AUDIO[4].play();
 		this.width = 138;
 		this.height = 138;
 	}
@@ -444,6 +474,7 @@ $(document).ready(function() {
 
 	Enemy.prototype.draw = function(index) {
 		if(this.y > this.canvas.height) {
+			clearTimeout(this.shooting);
 			field.enemies.splice(index, 1);
 			return;
 		}
@@ -488,13 +519,20 @@ $(document).ready(function() {
 	}
 
 	Enemy.prototype.shoot = function(first) {
-		if(!first)
+		if(!first) {
 			this.gun.unshift(new EGun(this));
+			app.AUDIO[1].pause();
+			app.AUDIO[1].currentTime = 0;
+			app.AUDIO[1].play();
+		}
 		var self = this;
 		this.shooting = setTimeout(function() { self.shoot(); }, Math.floor(Math.random() * (2000 - 500 + 1)) + 500);
 	}
 
 	Enemy.prototype.destroy = function() {
+		app.AUDIO[2].pause();
+		app.AUDIO[2].currentTime = 0;
+		app.AUDIO[2].play();
 		clearTimeout(this.shooting);
 		this.exp_frame = 0;
 	}
